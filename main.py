@@ -1,6 +1,6 @@
 #Created by: Ricardo Garcia
 
-class Encript:
+class Encrypt:
     def __init__(self, message):
         self.message = message
     
@@ -56,10 +56,60 @@ class Encript:
         return encrypt
     
     def decrypt(self):
-        pass 
+
+        '''
+        Input:
+        ------
+        This method don't receive an input
+
+        Output:
+        -------
+        Return the decrypted message 
+        
+        '''
+        encrypt = self.encrypt()
+        encrypt = list(encrypt)
+
+        #now we gonna turn into unicode the encrypted message, and reverse all the operations that we do on encrypt
+
+        array = [ord(char) for char in encrypt]
+
+        pairs = []
+        for i in range(0, len(array) - 1, 2):
+            pairs.append([array[i], array[i+1]])
+        
+        #border case: the array isn't pair
+        if len(encrypt) % 2 != 0:
+            pairs.append([array[-1]])
+            
+        for i in range(len(pairs)-1):
+            pairs[i][0] -= i+1
+            pairs[i][1] -= i
+
+        if len(array) % 2 != 0: 
+            pairs[-1][0] -= len(array)-2
+        final_array = []
+
+        for i in range(len(pairs)):
+            final_array.extend(pairs[i])
+        
+        for i in range(len(final_array)):
+            final_array[i] = chr(final_array[i] )
+
+
+        return ''.join(final_array)
+
+
+
     def print(self):
         print('the encrypted array is: ', self.encrypt())
+        print('The decrypted array is: ', self.decrypt())
     
-encrypt = Encript('Gato E')
-cat = encrypt.encrypt()
-encrypt.print()
+#How to use it:
+
+message = 'The cats are the best pets'
+encryption = Encrypt(message)
+encryption.encrypt()
+encryption.decrypt()
+
+encryption.print()
